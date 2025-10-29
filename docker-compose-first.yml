@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  photon:
+    image: komoot/photon:0.7
+    container_name: photon
+    ports:
+      - "2322:2322"
+    volumes:
+      - ./photon_data:/photon_data
+    environment:
+      # Опционально — можно указать язык интерфейса по умолчанию
+      - PHOTON_LANGUAGE=ru
+    command: >
+      bash -c "
+        if [ ! -d /photon_data/es_data ]; then
+          echo '➡️  Импортируем данные Photon с поддержкой русского языка...';
+          wget -O /photon_data/photon-dump.jsonl.zst https://download1.graphhopper.com/public/europe/germany/photon-dump-germany-0.7-latest.jsonl.zst &&
+          zstd --stdout -d /photon_data/photon-dump.jsonl.zst |
+          java -jar photon.jar -nominatim-import -languages en,de,fr,ru,local -import-file - &&
+          echo '✅ Импорт завершён';
+        else
+          echo '📦 Данные уже импортированы, запускаем сервер Photon...';
+        fi;
+        java -jar photon.jar -data-dir /photon_data/es_data
+      "

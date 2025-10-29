@@ -1,0 +1,12 @@
+services:
+  photon:
+    build: .
+    container_name: photon
+    ports:
+      - "2322:2322"
+    volumes:
+      - ./photon_data:/photon_data
+    environment:
+      PHOTON_PORT: 2322
+      JAVA_OPTS: -Xms1g -Xmx2g
+    restart: unless-stopped
