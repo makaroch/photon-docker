@@ -4,12 +4,12 @@ set -euo pipefail
 echo "Запуск Photon..."
 
 if [ ! -d "$PHOTON_DATA_DIR" ]; then
-  echo "➡️ Импортируем данные OpenStreetMap..."
+  echo "Импорт данных OpenStreetMap..."
   mkdir -p "$PHOTON_DATA_DIR"
   cd /photon_data
 
   DUMP_URL="https://download1.graphhopper.com/public/europe/austria/photon-dump-austria-0.7-latest.jsonl.zst"
-  wget -q -O photon-dump.jsonl.zst "$DUMP_URL"
+  wget -O photon-dump.jsonl.zst "$DUMP_URL"
 
   echo "Распаковка дампа..."
 
